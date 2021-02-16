@@ -7,24 +7,24 @@ import models.HumanPlayer;
 import views.MySquarePane;
 
 public class ClickHandlerAI extends Handler {
-	private HumanPlayer jH;
-	private AIPlayer jIA;
+	private HumanPlayer humanPlayer;
+	private AIPlayer AIPlayer;
 	private Othello game;
 
-	public ClickHandlerAI(Othello game, HumanPlayer jH, AIPlayer jIA) {
+	public ClickHandlerAI(Othello game, HumanPlayer humanPlayer, AIPlayer AIPlayer) {
 		this.game = game;
-		this.jH = jH;
-		this.jIA = jIA;
+		this.humanPlayer = humanPlayer;
+		this.AIPlayer = AIPlayer;
 	}
 
 	@Override
 	public void handle(MouseEvent event) {
 		MySquarePane square = (MySquarePane) event.getSource();
-		if (jH.equals(game.getTurn())) {
+		if (humanPlayer.equals(game.getTurn())) {
 			game.play(square.getIndiceCase());
 		}
-		while (jIA.equals(game.getTurn()) && !game.endGame())
-			game.play(jIA.playMove(game));
+		while (AIPlayer.equals(game.getTurn()) && !game.endGame())
+			game.play(AIPlayer.playMove(game));
 
 		if (game.endGame()) {
 			System.out.println("Partie terminee");

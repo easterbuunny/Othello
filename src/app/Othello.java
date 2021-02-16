@@ -17,7 +17,8 @@ public class Othello {
 	private Player blackPlayer;
 	private Player whitePlayer;
 	private Board board;
-	private boolean blacksPlay;
+	// Determine a qui c'est le tour de jouer
+	private boolean blacksPlay; 
 
 	public Othello(Player blackPlayer, Player whitePlayer) {
 		this.blackPlayer = blackPlayer;
@@ -33,9 +34,15 @@ public class Othello {
 		else if(blackPlayer instanceof HumanPlayer && whitePlayer instanceof AIPlayer)
 			board.setBoardPane( new MyBoardPane(new ClickHandlerAI(this, (HumanPlayer) blackPlayer,(AIPlayer) whitePlayer)));
 	}
-
+	
+	/**
+	 * Determine si un coup est valide pour un joueur
+	 * @param player le joueur effectuant le coup
+	 * @param indexMove l'indice de la case sur laquelle la piece est jouee
+	 * @return true si le coup est valide pour le joueur , false sinon
+	 */
 	public boolean validMove(Player player, int indexMove) {
-		return getValidMove(player).contains(indexMove);
+		return getValidMoves(player).contains(indexMove);
 	}
 
 	public Player getBlackPlayer() {
@@ -56,7 +63,7 @@ public class Othello {
 	 * @param joueur 
 	 * @return Liste d'integer representant l'indice des cases des coups valides.
 	 */
-	public List<Integer> getValidMove(Player player) {
+	public List<Integer> getValidMoves(Player player) {
 		List<Integer> validMove = new ArrayList<Integer>();
 
 		for (int i = 0; i < 64; i++) {
@@ -67,34 +74,52 @@ public class Othello {
 		}
 		return validMove;
 	}
-
+	
+	/**
+	 * Modifie la valeur de l'attribut blacksPlay permettant de determinee a qui c'est le tour de jouer
+	 */
 	public void setTurn() {
-		if(blacksPlay && getValidMove(whitePlayer).size() > 0) {
+		// Si les noirs viennent de jouer et que les blancs ont un coup valide alors c'est au blanc de jouer
+		if(blacksPlay && getValidMoves(whitePlayer).size() > 0) {
 			blacksPlay  = false;
 		}
-		else if(!blacksPlay && getValidMove(blackPlayer).size() > 0) {
+		else if(!blacksPlay && getValidMoves(blackPlayer).size() > 0) {
 			blacksPlay = true;
 		}
 	}
-
+	
+	/**
+	 * Recupere le joueur a qui c'est le tour de jouer , fonctionne en tamdem avec setTurn
+	 * @return Le joueur a qui c'est le tour de jouer
+	 */
 	public Player getTurn() {
 		return blacksPlay ? blackPlayer : whitePlayer;
 	}
+	
+	/**
+	 * Ajoute un coup et ses repercussions (les captures) sur le plateau graphique et le plateau logique
+	 * @param currentPlayer Le joeur qui joue le coup
+	 * @param indexMove L'indice de la case du coup jouee
+	 */
 	public void addMove(Player currentPlayer, int indexMove) {
-		List<Integer> pieceCapturee = new ArrayList<Integer>();
-		pieceCapturee.addAll(CaptureEvaluator.capture(board, currentPlayer.getTypePiece(), indexMove));
+		List<Integer> capturedPiecesIndex = new ArrayList<Integer>();
+		capturedPiecesIndex.addAll(CaptureEvaluator.capture(board, currentPlayer.getTypePiece(), indexMove));
 		board.setSquare(currentPlayer.getTypePiece(), indexMove);
 		board.getBoardPane().setCase(currentPlayer.getTypePiece(), indexMove);
-		for (Integer piece : pieceCapturee) {
+		for (Integer piece : capturedPiecesIndex) {
 			board.setSquare(currentPlayer.getTypePiece(), piece);
 			board.getBoardPane().setCase(currentPlayer.getTypePiece(), piece);
 		}
 	}
-
+	
+	/**
+	 * Determine si la partie est terminee
+	 * @return true si la partie est terminee false sinon
+	 */
 	public boolean endGame() {
 		return board.isFull() || board.getNbPiece(TypePiece.BLACK) == 0
 				|| board.getNbPiece(TypePiece.WHITE) == 0
-				|| (getValidMove(whitePlayer).size() == 0 && getValidMove(blackPlayer).size() == 0);
+				|| (getValidMoves(whitePlayer).size() == 0 && getValidMoves(blackPlayer).size() == 0);
 	}
 
 	public void play(int indiceCoup) {

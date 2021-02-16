@@ -7,8 +7,8 @@ import views.MySquarePane;
 
 public class ClickHandlerPlayer extends Handler {
 	private Othello game ;
-	public ClickHandlerPlayer(Othello o) {
-		this.game = o;
+	public ClickHandlerPlayer(Othello game) {
+		this.game = game;
 	}
 
 	@Override

@@ -8,7 +8,7 @@ import views.MyStartingPane;
 
 public class Main extends Application {
 	
-	private static Stage prymaryStage;
+	private static Stage prymaryStage; // Fenetre de l'application
 	public static void main(String args[]) {
 		launch(args);
 	}
@@ -17,7 +17,7 @@ public class Main extends Application {
 	public void start(Stage prymaryStage) throws Exception {
 		Main.prymaryStage = prymaryStage;
 		Pane startingPane = new MyStartingPane();
-
+		
 		prymaryStage.setScene(new Scene(startingPane));
 		prymaryStage.setHeight(500);
 		prymaryStage.setWidth(500);
@@ -26,6 +26,10 @@ public class Main extends Application {
 		prymaryStage.show();
 	}
 	
+	/**
+	 * Permet de modifier la scene qui se deroule sur la fenetre
+	 * @param myPane Le panneau que l'on souhaite afficher
+	 */
 	public static void setPaneRoot(Pane myPane) {
 		Main.prymaryStage.getScene().setRoot(myPane);
 	}

@@ -25,10 +25,10 @@ public class Board {
 
 	/**
 	 * Permet de recuperer l'ensemble des indices des cases contenants un type de
-	 * piece
+	 * piece passe en parametre
 	 * 
-	 * @param tp Type de Piece
-	 * @return Retourne une liste de l'ensemble du type de piece passe en parametre
+	 * @param tp Type de Piece (BLACK ou WHITE)
+	 * @return Retourne une liste d'indice de case contenant le type de piece
 	 */
 	public List<Integer> getPiecesIndex(TypePiece tp) {
 		List<Integer> squaresIndex = new ArrayList<Integer>();

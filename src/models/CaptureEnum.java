@@ -3,6 +3,7 @@ package models;
 public enum CaptureEnum {
 	NORTH(-8),SOUTH(8),WEST(-1),EAST(1),NORTHWEST(-8 - 1),NORTHEAST(-8 + 1),SOUTHWEST(8 - 1),SOUTHEAST(8 + 1);
 	private int nextSquare;
+	// Nombre indiquant de combien de case on doit  decalee dans le tableau pour atteindre la case suivante selon la direction
 	
 	CaptureEnum(int nextSquare) {
 		this.nextSquare = nextSquare;
