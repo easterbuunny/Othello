@@ -27,12 +27,12 @@ public class OthelloTest {
 
 	@Test
 	public void getCoupValideTest_01() {
-		assertEquals(4, o.getValidMoves(o.getBlackPlayer().getTypePiece()).size());
+		assertEquals(4, o.getBoard().getValidMoves(o.getBlackPlayer().getTypePiece()).size());
 	}
 
 	@Test
 	public void getCoupValideTest_02() {
-		assertEquals(4, o.getValidMoves(o.getWhitePlayer().getTypePiece()).size());
+		assertEquals(4, o.getBoard().getValidMoves(o.getWhitePlayer().getTypePiece()).size());
 	}
 
 	@Test

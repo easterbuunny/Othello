@@ -40,7 +40,7 @@ public class MyGamePane extends BorderPane {
 	}
 
 	public void updateTurn() {
-		if(game.endGame()) {
+		if(game.getBoard().endGame()) {
 			Text winnerText = new Text();
 			winnerText.setText("Le gagnant est : " + game.getWinner().toString() + " avec " + game.getBoard().getNbPiece(game.getWinner().getTypePiece()) + " pieces");
 			winnerText.setFont(new Font(60));

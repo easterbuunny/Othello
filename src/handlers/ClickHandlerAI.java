@@ -1,11 +1,9 @@
 package handlers;
 
-import app.Main;
 import app.Othello;
 import javafx.scene.input.MouseEvent;
 import models.AIPlayer;
 import models.HumanPlayer;
-import views.MyEndGamePane;
 import views.MySquarePane;
 
 public class ClickHandlerAI extends Handler {
@@ -25,7 +23,7 @@ public class ClickHandlerAI extends Handler {
 		if (humanPlayer.equals(game.getTurn())) {
 			game.play(square.getIndiceCase());
 		}
-		while (AIPlayer.equals(game.getTurn()) && !game.endGame())
+		while (AIPlayer.equals(game.getTurn()) && !game.getBoard().endGame())
 			game.play(AIPlayer.playMove(game));
 		
 		System.out.println("Nb de noeud developpe : " + models.AIPlayer.nbNoeud);

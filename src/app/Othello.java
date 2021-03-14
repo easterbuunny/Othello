@@ -1,31 +1,15 @@
 package app;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import handlers.ClickHandlerAI;
 import handlers.ClickHandlerPlayer;
 import models.AIPlayer;
 import models.Board;
-import models.CaptureEvaluator;
 import models.HumanPlayer;
 import models.Player;
-import models.TypePiece;
 import views.MyBoardPane;
 
-public class Othello implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2695623659071153026L;
-	/**
-	 * 
-	 */
+public class Othello {
+
 	private Player blackPlayer;
 	private Player whitePlayer;
 	private Board board;
@@ -55,36 +39,6 @@ public class Othello implements Serializable {
 		}
 		this.getBoard().getBoardPane().setValidSquares(this, true);
 
-	}
-
-	/**
-	 * This method makes a "deep clone" of any Java object it is given.
-	 * 
-	 * @author Alvin Alexander, https://alvinalexander.com
-	 */
-	public static Object deepClone(Object object) {
-		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ObjectOutputStream oos = new ObjectOutputStream(baos);
-			oos.writeObject(object);
-			ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-			ObjectInputStream ois = new ObjectInputStream(bais);
-			return ois.readObject();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	/**
-	 * Determine si un coup est valide pour un joueur
-	 * 
-	 * @param player    le joueur effectuant le coup
-	 * @param indexMove l'indice de la case sur laquelle la piece est jouee
-	 * @return true si le coup est valide pour le joueur , false sinon
-	 */
-	public boolean validMove(Player player, int indexMove) {
-		return getValidMoves(player.getTypePiece()).contains(indexMove);
 	}
 
 	public Player getBlackPlayer() {
@@ -118,7 +72,7 @@ public class Othello implements Serializable {
 	public Player getWinner() {
 		int nbBlackPieces = board.getNbPiece(blackPlayer.getTypePiece());
 		int nbWhitePieces = board.getNbPiece(whitePlayer.getTypePiece());
-		if (endGame()) {
+		if (board.endGame()) {
 			if (nbBlackPieces > nbWhitePieces)
 				return blackPlayer;
 			if (nbWhitePieces > nbBlackPieces)
@@ -128,32 +82,15 @@ public class Othello implements Serializable {
 	}
 
 	/**
-	 * Recupere l'ensemble des coups valides pour un Joueur
-	 * 
-	 * @param joueur
-	 * @return Liste d'integer representant l'indice des cases des coups valides.
-	 */
-	public List<Integer> getValidMoves(TypePiece tp) {
-		List<Integer> validMove = new ArrayList<Integer>();
-
-		for (int i = 0; i < 64; i++) {
-			if (board.getSquare(i).isEmpty() && CaptureEvaluator.capture(board, tp, i).size() > 0) {
-				validMove.add(i);
-			}
-		}
-		return validMove;
-	}
-
-	/**
 	 * Modifie la valeur de l'attribut blacksPlay permettant de determinee a qui
 	 * c'est le tour de jouer
 	 */
 	public void setTurn() {
 		// Si les noirs viennent de jouer et que les blancs ont un coup valide alors
 		// c'est au blanc de jouer
-		if (blacksPlay && getValidMoves(whitePlayer.getTypePiece()).size() > 0) {
+		if (blacksPlay && board.getValidMoves(whitePlayer.getTypePiece()).size() > 0) {
 			blacksPlay = false;
-		} else if (!blacksPlay && getValidMoves(blackPlayer.getTypePiece()).size() > 0) {
+		} else if (!blacksPlay && board.getValidMoves(blackPlayer.getTypePiece()).size() > 0) {
 			blacksPlay = true;
 		}
 	}
@@ -176,41 +113,19 @@ public class Othello implements Serializable {
 	 * @param indexMove     L'indice de la case du coup jouee
 	 */
 	public void addMove(Player currentPlayer, int indexMove) {
-		board.addMoveToBoardPane(currentPlayer, indexMove);
-		board.addMoveToBoard(currentPlayer, indexMove);
-	}
-
-	/**
-	 * Determine si la partie est terminee
-	 * 
-	 * @return true si la partie est terminee false sinon
-	 */
-	public boolean endGame() {
-		return board.isFull() || board.getNbPiece(TypePiece.BLACK) == 0 || board.getNbPiece(TypePiece.WHITE) == 0
-				|| (getValidMoves(whitePlayer.getTypePiece()).size() == 0
-						&& getValidMoves(blackPlayer.getTypePiece()).size() == 0);
+		board.addMoveToBoardPane(currentPlayer.getTypePiece(), indexMove);
+		board.addMoveToBoard(currentPlayer.getTypePiece(), indexMove);
 	}
 
 	public void play(int indiceCoup) {
-		if (!endGame()) {
+		if (!board.endGame()) {
 			Player jCourant = getTurn();
 			Integer coupJouee = indiceCoup;
-			if (validMove(jCourant, coupJouee)) {
+			if (board.validMove(jCourant, coupJouee)) {
 				this.getBoard().getBoardPane().setValidSquares(this, false);
 				addMove(jCourant, coupJouee);
 				setTurn();
 				this.getBoard().getBoardPane().setValidSquares(this, true);
-			}
-		}
-	}
-
-	public void playAI(int indiceCoup) {
-		if (!endGame()) {
-			Player jCourant = getTurn();
-			Integer coupJouee = indiceCoup;
-			if (validMove(jCourant, coupJouee)) {
-				board.addMoveToBoard(jCourant, indiceCoup);
-				setTurn();
 			}
 		}
 	}

@@ -1,15 +1,11 @@
 package models;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import views.MyBoardPane;
 
-public class Board implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4007404149313835289L;
+public class Board{
+
 	private Square squares[];
 	private MyBoardPane boardPane;
 
@@ -19,6 +15,10 @@ public class Board implements Serializable {
 			squares[i] = new Square();
 		}
 		initBoard();
+	}
+
+	public Board(Square[] squares) {
+		this.squares = squares;
 	}
 
 	private void initBoard() {
@@ -48,26 +48,34 @@ public class Board implements Serializable {
 		return squares;
 	}
 
-	public void addMoveToBoard(Player currentPlayer, int indexMove) {
+	public void addMoveToBoard(TypePiece currentTypePiece, int indexMove) {
 		List<Integer> capturedPiecesIndex = new ArrayList<Integer>();
-		capturedPiecesIndex.addAll(CaptureEvaluator.capture(this, currentPlayer.getTypePiece(), indexMove));
-		setSquare(currentPlayer.getTypePiece(), indexMove);
+		capturedPiecesIndex.addAll(CaptureEvaluator.capture(this, currentTypePiece, indexMove));
+		setSquare(currentTypePiece, indexMove);
 		for (Integer piece : capturedPiecesIndex)
-			setSquare(currentPlayer.getTypePiece(), piece);
+			setSquare(currentTypePiece, piece);
 
 	}
 
-	public void addMoveToBoardPane(Player currentPlayer, int indexMove) {
+	public void addMoveToBoardPane(TypePiece currentTypePiece, int indexMove) {
 		List<Integer> capturedPiecesIndex = new ArrayList<Integer>();
-		capturedPiecesIndex.addAll(CaptureEvaluator.capture(this, currentPlayer.getTypePiece(), indexMove));
-		getBoardPane().setCase(currentPlayer.getTypePiece(), indexMove);
+		capturedPiecesIndex.addAll(CaptureEvaluator.capture(this, currentTypePiece, indexMove));
+		getBoardPane().setCase(currentTypePiece, indexMove);
 		for (Integer piece : capturedPiecesIndex)
-			getBoardPane().setCase(currentPlayer.getTypePiece(), piece);
+			getBoardPane().setCase(currentTypePiece, piece);
 
 	}
-	
-	public void playAI(int move, Player p) {
-		
+
+	public Board getBoardAfterMove(TypePiece tp, int indexMove) {
+		Square[] newSquares = new Square[64];
+		for (int i = 0; i < 64; i++) {
+			newSquares[i] = new Square();
+			if(squares[i].getPiece() != null)
+				newSquares[i].setPiece(squares[i].getPiece().getTypePiece());
+		}
+		Board newBoard = new Board(newSquares);
+		newBoard.addMoveToBoard(tp, indexMove);
+		return newBoard;
 	}
 
 	public MyBoardPane getBoardPane() {
@@ -95,15 +103,40 @@ public class Board implements Serializable {
 	}
 
 	/**
-	 * Methode permettant de verifier si un plateau est plein ou non.
+	 * Determine si un coup est valide pour un joueur
 	 * 
-	 * @return True si le plateau est plein , false sinon
+	 * @param player    le joueur effectuant le coup
+	 * @param indexMove l'indice de la case sur laquelle la piece est jouee
+	 * @return true si le coup est valide pour le joueur , false sinon
 	 */
-	public boolean isFull() {
-		for (int i = 0; i < 64; i++)
-			if (squares[i].isEmpty())
-				return false;
-		return true;
+	public boolean validMove(Player player, int indexMove) {
+		return getValidMoves(player.getTypePiece()).contains(indexMove);
+	}
+
+	/**
+	 * Recupere l'ensemble des coups valides pour un Joueur
+	 * 
+	 * @param joueur
+	 * @return Liste d'integer representant l'indice des cases des coups valides.
+	 */
+	public List<Integer> getValidMoves(TypePiece tp) {
+		List<Integer> validMove = new ArrayList<Integer>();
+
+		for (int i = 0; i < 64; i++) {
+			if (getSquare(i).isEmpty() && CaptureEvaluator.capture(this, tp, i).size() > 0) {
+				validMove.add(i);
+			}
+		}
+		return validMove;
+	}
+
+	/**
+	 * Determine si la partie est terminee
+	 * 
+	 * @return true si la partie est terminee false sinon
+	 */
+	public boolean endGame() {
+		return getValidMoves(TypePiece.BLACK).size() == 0 && getValidMoves(TypePiece.WHITE).size() == 0;
 	}
 
 	/**
@@ -121,4 +154,5 @@ public class Board implements Serializable {
 				compteur++;
 		return compteur;
 	}
+
 }

@@ -1,19 +1,15 @@
 package models;
 
-import java.io.Serializable;
-
-public class Square implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3742222727862921322L;
-	Piece piece;
+public class Square {
+	private Piece piece;
 
 	public Square() {
 		piece = new Piece(TypePiece.NONE);
 	}
+
 	/**
 	 * Methode qui permet de determiner si une case contient une piece.
+	 * 
 	 * @return true si la case contient une piece , false sinon
 	 */
 	public boolean isEmpty() {

@@ -1,6 +1,5 @@
 package views;
 
-import java.io.Serializable;
 import java.util.List;
 
 import app.Othello;
@@ -10,11 +9,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import models.TypePiece;
 
-public class MyBoardPane extends GridPane implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1749033816973926566L;
+public class MyBoardPane extends GridPane {
+
 	private final int gridSize = 8;
 	private MySquarePane squarePane[];
 
@@ -50,7 +46,7 @@ public class MyBoardPane extends GridPane implements Serializable {
 	}
 
 	public void setValidSquares(Othello game, boolean emphasizeValidSquares) {
-		List<Integer> validMoves = game.getValidMoves(game.getTurn().getTypePiece());
+		List<Integer> validMoves = game.getBoard().getValidMoves(game.getTurn().getTypePiece());
 		for (Integer validMove : validMoves) {
 			squarePane[validMove].setColorSquare(emphasizeValidSquares ? Color.rgb(250,128, 114) : Color.GREEN);
 		}
