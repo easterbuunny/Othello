@@ -1,10 +1,15 @@
 package models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import views.MyBoardPane;
 
-public class Board {
+public class Board implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4007404149313835289L;
 	private Square squares[];
 	private MyBoardPane boardPane;
 
@@ -37,6 +42,32 @@ public class Board {
 				squaresIndex.add(i);
 		}
 		return squaresIndex;
+	}
+
+	public Square[] getSquares() {
+		return squares;
+	}
+
+	public void addMoveToBoard(Player currentPlayer, int indexMove) {
+		List<Integer> capturedPiecesIndex = new ArrayList<Integer>();
+		capturedPiecesIndex.addAll(CaptureEvaluator.capture(this, currentPlayer.getTypePiece(), indexMove));
+		setSquare(currentPlayer.getTypePiece(), indexMove);
+		for (Integer piece : capturedPiecesIndex)
+			setSquare(currentPlayer.getTypePiece(), piece);
+
+	}
+
+	public void addMoveToBoardPane(Player currentPlayer, int indexMove) {
+		List<Integer> capturedPiecesIndex = new ArrayList<Integer>();
+		capturedPiecesIndex.addAll(CaptureEvaluator.capture(this, currentPlayer.getTypePiece(), indexMove));
+		getBoardPane().setCase(currentPlayer.getTypePiece(), indexMove);
+		for (Integer piece : capturedPiecesIndex)
+			getBoardPane().setCase(currentPlayer.getTypePiece(), piece);
+
+	}
+	
+	public void playAI(int move, Player p) {
+		
 	}
 
 	public MyBoardPane getBoardPane() {

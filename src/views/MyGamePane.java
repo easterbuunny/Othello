@@ -1,21 +1,24 @@
 package views;
 
+
 import app.Main;
 import app.Othello;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import models.TypePiece;
 
 public class MyGamePane extends BorderPane {
 	private Text tour;
 	private Text score;
-	private Othello game ;
-	
+	private Othello game;
+
 	public MyGamePane(Othello game) {
-		this.game  = game;
+		this.game = game;
 		tour = new Text(game.getBlackPlayer().toString());
-		score = new Text("Noir : " + game.getBoard().getNbPiece(TypePiece.BLACK) + " Blanc : " + game.getBoard().getNbPiece(TypePiece.WHITE));
+		score = new Text("Noir : " + game.getBoard().getNbPiece(TypePiece.BLACK) + " Blanc : "
+				+ game.getBoard().getNbPiece(TypePiece.WHITE));
 		this.setCenter(game.getBoard().getBoardPane());
 		this.setRight(tour);
 		this.setTop(score);
@@ -28,14 +31,27 @@ public class MyGamePane extends BorderPane {
 			Main.setPaneRoot(new MyStartingPane());
 		});
 		this.setBottom(exitGame);
-		
+
 	}
-	
+
 	public void updateScore() {
-		score.setText("Noir : " + game.getBoard().getNbPiece(TypePiece.BLACK) + " Blanc : " + game.getBoard().getNbPiece(TypePiece.WHITE));
+		score.setText("Noir : " + game.getBoard().getNbPiece(TypePiece.BLACK) + " Blanc : "
+				+ game.getBoard().getNbPiece(TypePiece.WHITE));
 	}
+
 	public void updateTurn() {
-		tour.setText("Au tour de " + game.getTurn().toString());
+		if(game.endGame()) {
+			Text winnerText = new Text();
+			winnerText.setText("Le gagnant est : " + game.getWinner().toString() + " avec " + game.getBoard().getNbPiece(game.getWinner().getTypePiece()) + " pieces");
+			winnerText.setFont(new Font(60));
+			winnerText.setX(300);
+			winnerText.setY(300);
+			winnerText.setY(300);
+			winnerText.setStyle("-fx-text-fill: red");
+			this.setTop(winnerText);
+		}
+		else
+			tour.setText("Au tour de " + game.getTurn().toString());
 	}
-	
+
 }

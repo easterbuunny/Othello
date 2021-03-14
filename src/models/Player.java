@@ -1,6 +1,12 @@
 package models;
 
-public abstract class Player {
+import java.io.Serializable;
+
+public abstract class Player implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1696436491628251357L;
 	private String name;
 	TypePiece tp;
 	

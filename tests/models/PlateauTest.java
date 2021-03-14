@@ -14,21 +14,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 class PlateauTest {
 	Board board;
 
-	public void remplirPlateau(Board board, int nbRow, int nbColumn) {
-		if (nbRow > 8 || nbColumn > 8 || nbRow < 0 || nbColumn < 0)
-			return;
-
-		for (int i = 0; i < nbRow; i++) {
-			for (int j = 0; j < nbColumn; j++) {
-				if (j % 2 == 0) {
-					board.getSquare(i,j).setPiece(TypePiece.BLACK);
-				} else {
-					board.getSquare(i,j).setPiece(TypePiece.WHITE);
-				}
-			} // Fin for colonne
-		} // Fin for ligne
-	}
-
 	@BeforeEach
 	public void beforeEach() {
 		board = new Board();
@@ -39,28 +24,7 @@ class PlateauTest {
 		board = null;
 	}
 
-	@Test
-	void testisFull_01() {
-		assertFalse(board.isFull());
-	}
-
-	@Test
-	void testisFull_02() {
-		remplirPlateau(board, 5, 6);
-		assertFalse(board.isFull());
-	}
-
-	@Test
-	void testisFull_03() {
-		remplirPlateau(board, 2, 4);
-		assertFalse(board.isFull());
-	}
-
-	@Test
-	void testisFull_04() {
-		remplirPlateau(board, 8, 8);
-		assertTrue(board.isFull());
-	}
+	
 
 	@Test
 	void testInit_01() {

@@ -19,8 +19,8 @@ public class Main extends Application {
 		Pane startingPane = new MyStartingPane();
 		
 		prymaryStage.setScene(new Scene(startingPane));
-		prymaryStage.setHeight(500);
-		prymaryStage.setWidth(500);
+		prymaryStage.setHeight(600);
+		prymaryStage.setWidth(600);
 		prymaryStage.centerOnScreen();
 		prymaryStage.setResizable(false);
 		prymaryStage.show();

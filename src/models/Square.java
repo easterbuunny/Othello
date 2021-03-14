@@ -1,6 +1,12 @@
 package models;
 
-public class Square {
+import java.io.Serializable;
+
+public class Square implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3742222727862921322L;
 	Piece piece;
 
 	public Square() {
