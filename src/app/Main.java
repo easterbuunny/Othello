@@ -22,7 +22,7 @@ public class Main extends Application {
 		prymaryStage.setHeight(600);
 		prymaryStage.setWidth(600);
 		prymaryStage.centerOnScreen();
-		prymaryStage.setResizable(false);
+		prymaryStage.setResizable(true);
 		prymaryStage.show();
 	}
 	

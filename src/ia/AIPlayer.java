@@ -1,44 +1,51 @@
-package models;
+package ia;
 
 import java.util.List;
 
 import app.Othello;
+import models.Board;
+import models.Player;
+import models.TypePiece;
 
 public class AIPlayer extends Player {
-	/**
-	 * 
-	 */
+
 	private int level; // Niveau de l'IA
-	private int depth;
 	private int bestMove;
+	private int depth;
 	public static int nbNoeud = 0;
 
 	public AIPlayer(String name, TypePiece tp, int level) {
 		super(name, tp);
 		this.level = level;
-		if (level == 1)
-			this.depth = 1;
-		if (level == 2)
-			this.depth = 10;
+		initDepth();
 	}
-	
-	public int mobility_evaluator(Board board) {
-		int mobilityAIPlayer = board.getValidMoves(this.tp).size();
-		int mobilityOppositePlayer = board.getValidMoves(TypePiece.getOpposite(this.tp)).size();
-		return mobilityAIPlayer - mobilityOppositePlayer;
+
+	private void initDepth() {
+		if (level % 2 == 1) {
+			depth = 3;
+		} else {
+			depth = 5;
+		}
 	}
-	
-	public int material_evaluator(Board board) {
-		return board.getNbPiece(this.getTypePiece())
-		- board.getNbPiece(TypePiece.getOpposite(this.getTypePiece()));
-	}
-	
-	
-	public int evaluate2(Board board) {
-		return 0;
-	}
+
 	public int evaluate(Board board) {
-		return material_evaluator(board);
+		if (board.endGame() && board.getNbPiece(this.getTypePiece()) > board
+				.getNbPiece(TypePiece.getOpposite(this.getTypePiece()))) {
+			return Integer.MAX_VALUE;
+		}
+		if (level <= 2) {
+			return AIEvaluator.material_evaluator(board, this.getTypePiece());
+		} else if (level <= 4) {
+			return AIEvaluator.material_evaluator(board, this.getTypePiece())
+					+ AIEvaluator.mobility_evaluator(board, this.getTypePiece()) * 3;
+		} else if (level <= 6) {
+			return AIEvaluator.material_evaluator(board, this.getTypePiece()) * 2
+					+ AIEvaluator.mobility_evaluator(board, this.getTypePiece()) * 3
+					+ AIEvaluator.position_evaluator(board, this.getTypePiece()) ;
+		}
+		
+		return -1;
+
 	}
 
 	public int getBestMove() {
@@ -51,12 +58,11 @@ public class AIPlayer extends Player {
 
 	public int playMove(Othello game) {
 		miniMaxAlphaBeta(game.getBoard(), depth, Double.MIN_VALUE, Double.MAX_VALUE, true);
-		//miniMax(virtualGame,depth,true);
+		// miniMax(virtualGame,depth,true);
 		return getBestMove();
 	}
 
-	public double miniMaxAlphaBeta(Board position, int depth, double alpha, double beta,
-			boolean maximizingPlayer) {
+	public double miniMaxAlphaBeta(Board position, int depth, double alpha, double beta, boolean maximizingPlayer) {
 		nbNoeud++;
 		if (depth == 0 || position.endGame()) {
 			return evaluate(position);
@@ -67,7 +73,6 @@ public class AIPlayer extends Player {
 			for (int move : validMoves) {
 				Board newPosition = position.getBoardAfterMove(this.getTypePiece(), move);
 				Double eval = miniMaxAlphaBeta(newPosition, depth - 1, alpha, beta, false);
-
 				if (eval > maxEval) {
 					if (this.depth == depth) {
 						setBestMove(move);

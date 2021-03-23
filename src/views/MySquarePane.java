@@ -6,13 +6,13 @@ import javafx.scene.shape.Rectangle;
 import models.TypePiece;
 
 public class MySquarePane extends StackPane {
-	private static final double caseSize = 50;
-	private static final Color colorCase = Color.GREEN;
+	private static final double squareSize = 50;
+	private static final Color squareColor = Color.GREEN;
 	private int indiceCase;
 
 	public MySquarePane(int indiceCase) {
 		super();
-		this.getChildren().add(new Rectangle(caseSize, caseSize, colorCase));
+		this.getChildren().add(new Rectangle(squareSize, squareSize, squareColor));
 		this.indiceCase = indiceCase;
 
 	}
@@ -22,7 +22,7 @@ public class MySquarePane extends StackPane {
 	}
 
 	public void setColorSquare(Color color) {
-		this.getChildren().add(new Rectangle(caseSize, caseSize, color));
+		this.getChildren().add(new Rectangle(squareSize, squareSize, color));
 	}
 
 	public int getIndiceCase() {

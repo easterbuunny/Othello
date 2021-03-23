@@ -1,8 +1,9 @@
 package app;
 
+import handlers.AIvsAIhandler;
 import handlers.ClickHandlerAI;
 import handlers.ClickHandlerPlayer;
-import models.AIPlayer;
+import ia.AIPlayer;
 import models.Board;
 import models.HumanPlayer;
 import models.Player;
@@ -36,6 +37,9 @@ public class Othello {
 		} else if (blackPlayer instanceof HumanPlayer && whitePlayer instanceof AIPlayer) {
 			board.setBoardPane(
 					new MyBoardPane(new ClickHandlerAI(this, (HumanPlayer) blackPlayer, (AIPlayer) whitePlayer)));
+		}
+		else if (blackPlayer instanceof AIPlayer && whitePlayer instanceof AIPlayer) {
+			board.setBoardPane(new MyBoardPane(new AIvsAIhandler(this)));
 		}
 		this.getBoard().getBoardPane().setValidSquares(this, true);
 

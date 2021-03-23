@@ -42,11 +42,10 @@ public class MyGamePane extends BorderPane {
 	public void updateTurn() {
 		if(game.getBoard().endGame()) {
 			Text winnerText = new Text();
-			winnerText.setText("Le gagnant est : " + game.getWinner().toString() + " avec " + game.getBoard().getNbPiece(game.getWinner().getTypePiece()) + " pieces");
-			winnerText.setFont(new Font(60));
-			winnerText.setX(300);
-			winnerText.setY(300);
-			winnerText.setY(300);
+			winnerText.setText("Le gagnant est : " + game.getWinner().toString() + "(" + game.getWinner().getTypePiece() + ")" + " avec " + game.getBoard().getNbPiece(game.getWinner().getTypePiece()) + " pieces");
+			winnerText.setFont(new Font(30));
+			winnerText.setX(150);
+			winnerText.setY(150);
 			winnerText.setStyle("-fx-text-fill: red");
 			this.setTop(winnerText);
 		}
