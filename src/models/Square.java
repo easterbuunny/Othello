@@ -1,9 +1,12 @@
 package models;
 
 public class Square {
+	//Attributs
 	private Piece piece;
 
+	//Constructeur
 	public Square() {
+		//Creer une piece ni blanche ni noir, elle est a definir
 		piece = new Piece(TypePiece.NONE);
 	}
 
@@ -16,6 +19,7 @@ public class Square {
 		return piece.getTypePiece().equals(TypePiece.NONE);
 	}
 
+	//Getter & Setter
 	public Piece getPiece() {
 		return piece;
 	}

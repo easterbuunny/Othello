@@ -47,7 +47,12 @@ public class Board{
 	public Square[] getSquares() {
 		return squares;
 	}
-
+	
+	/**
+	 * Ajoute le coup uniquement dans le model representant le plateau
+	 * @param currentTypePiece Le type de piece placee
+	 * @param indexMove L'indice du coup
+	 */
 	public void addMoveToBoard(TypePiece currentTypePiece, int indexMove) {
 		List<Integer> capturedPiecesIndex = new ArrayList<Integer>();
 		capturedPiecesIndex.addAll(CaptureEvaluator.capture(this, currentTypePiece, indexMove));
@@ -56,7 +61,11 @@ public class Board{
 			setSquare(currentTypePiece, piece);
 
 	}
-
+	/**
+	 * Ajoute le coup uniquement sur l'othellier (et non pas sur le model representant le eplateau).
+	 * @param currentTypePiece Le type de piece placee
+	 * @param indexMove L'indice du coup
+	 */
 	public void addMoveToBoardPane(TypePiece currentTypePiece, int indexMove) {
 		List<Integer> capturedPiecesIndex = new ArrayList<Integer>();
 		capturedPiecesIndex.addAll(CaptureEvaluator.capture(this, currentTypePiece, indexMove));
@@ -65,7 +74,12 @@ public class Board{
 			getBoardPane().setCase(currentTypePiece, piece);
 
 	}
-
+	/**
+	 * Permet de recuperer le nouveau plateau apres un coup.
+	 * @param tp Type de piece jouant le coup
+	 * @param indexMove l'indice du coup
+	 * @return Un nouveau plateau apres le coup jouee
+	 */
 	public Board getBoardAfterMove(TypePiece tp, int indexMove) {
 		Square[] newSquares = new Square[64];
 		for (int i = 0; i < 64; i++) {

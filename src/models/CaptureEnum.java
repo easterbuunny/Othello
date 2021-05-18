@@ -3,7 +3,7 @@ package models;
 public enum CaptureEnum {
 	NORTH(-8),SOUTH(8),WEST(-1),EAST(1),NORTHWEST(-8 - 1),NORTHEAST(-8 + 1),SOUTHWEST(8 - 1),SOUTHEAST(8 + 1);
 	private int nextSquare;
-	// Nombre indiquant de combien de case on doit  decalee dans le tableau pour atteindre la case suivante selon la direction
+	// Nombre indiquant de combien de case on doit se decaler dans le tableau pour atteindre la case suivante selon la direction
 	
 	CaptureEnum(int nextSquare) {
 		this.nextSquare = nextSquare;
@@ -13,7 +13,12 @@ public enum CaptureEnum {
 		return nextSquare;
 	}
 	
-	public boolean evaluateCondition(int squareIndex) {
+	/**
+	 * Determine si une capture peut avoir lieu dans une certaine direction
+	 * @param squareIndex indice de la case a tester
+	 * @return True si une capture NE PEUT PAS etre envisagee dans la direction , false sinon
+	 */
+	public boolean cannotCaptureInThisDirection(int squareIndex) {
 		if(this.equals(NORTH)){
 			return squareIndex <= 7;
 		}

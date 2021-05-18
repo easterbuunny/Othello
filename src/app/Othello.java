@@ -24,7 +24,9 @@ public class Othello {
 		this.board = new Board();
 		init();
 	}
-
+	/**
+	 * Creer un plateau avec le bon handler en fonction des joueurs?
+	 */
 	private void init() {
 
 		if (blackPlayer instanceof HumanPlayer && whitePlayer instanceof HumanPlayer)
@@ -72,7 +74,10 @@ public class Othello {
 	public void setBlacksPlay(boolean blacksPlay) {
 		this.blacksPlay = blacksPlay;
 	}
-
+	/**
+	 * 
+	 * @return Le joueur qui a gagnee , renvoie null si la partie n'est pas terminee 
+	 */
 	public Player getWinner() {
 		int nbBlackPieces = board.getNbPiece(blackPlayer.getTypePiece());
 		int nbWhitePieces = board.getNbPiece(whitePlayer.getTypePiece());
@@ -120,7 +125,11 @@ public class Othello {
 		board.addMoveToBoardPane(currentPlayer.getTypePiece(), indexMove);
 		board.addMoveToBoard(currentPlayer.getTypePiece(), indexMove);
 	}
-
+	
+	/**
+	 * Permet de jouer un coup
+	 * @param indiceCoup L'indice ou la piece va etre inseree
+	 */
 	public void play(int indiceCoup) {
 		if (!board.endGame()) {
 			Player jCourant = getTurn();
