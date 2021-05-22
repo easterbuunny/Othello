@@ -137,7 +137,7 @@ public class MyStartingPane extends BorderPane {
      */
     private void handlePlayerMode() {
         //Lance le jeu joueur contre joueur
-        Othello game = new Othello(new HumanPlayer("J1", TypePiece.BLACK), new HumanPlayer("J2", TypePiece.WHITE));
+        Othello game = new Othello(new HumanPlayer("N", TypePiece.BLACK), new HumanPlayer("B", TypePiece.WHITE));
         Main.setPaneRoot(new MyGamePane(game));
     }
 }

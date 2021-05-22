@@ -35,12 +35,12 @@ public class AIEvaluator {
 	 */
 	public static int material_evaluator(Board board, TypePiece tp) {
 		if (board.endGame()
-				&& board.getNbPiece(tp) > board.getNbPiece(TypePiece.getOpposite(TypePiece.getOpposite(tp)))) {
-			return Integer.MAX_VALUE;
+				&& board.getNbPiece(tp) > board.getNbPiece(TypePiece.getOpposite(tp))) {
+			return 10000;
 		}
 		if (board.endGame()
-				&& board.getNbPiece(tp) < board.getNbPiece(TypePiece.getOpposite(TypePiece.getOpposite(tp)))) {
-			return Integer.MIN_VALUE;
+				&& board.getNbPiece(tp) < board.getNbPiece(TypePiece.getOpposite(tp))) {
+			return -10000;
 		}
 		return board.getNbPiece(tp) - board.getNbPiece(TypePiece.getOpposite(tp));
 	}

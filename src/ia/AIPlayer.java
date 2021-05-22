@@ -28,7 +28,7 @@ public class AIPlayer extends Player {
 		if (level % 2 == 1) {
 			depth = 3;
 		} else {
-			depth = 6;
+			depth = 5;
 		}
 	}
 
@@ -55,8 +55,7 @@ public class AIPlayer extends Player {
 	}
 
 	public double level2AIevaluator(Board board) {
-		return AIEvaluator.material_evaluator(board, this.getTypePiece())
-				+ AIEvaluator.mobility_evaluator(board, this.getTypePiece());
+		return AIEvaluator.material_evaluator(board, this.getTypePiece()) + AIEvaluator.mobility_evaluator(board, this.getTypePiece());
 	}
 
 	public double level3AIevaluator(Board board) {
@@ -64,15 +63,15 @@ public class AIPlayer extends Player {
 		double coeffMobility, coeffPosition, coeffMaterial;
 		// A L'OUVERTURE, on cherche a reduire la mobilite de l'adversaire.
 		if (nbPieces < 20) {
-			coeffMaterial = 10; // Eviter de rater l'opportunite de gagner la partie lors de l'ouverture.
-			coeffMobility = 10;
-			coeffPosition = 1; // Eviter de rater l'opportunite de gagner un coin lors de l'ouverture
+			coeffMaterial = 1; 
+			coeffMobility = 1;
+			coeffPosition = 10;
 		}
 		// EN MIDGAME, ON CHERCHE A OBTENIR UNE BONNE POSITION
 		else if (nbPieces < 50) {
 			coeffMaterial = 5;
 			coeffPosition = 10;
-			coeffMobility = 5;
+			coeffMobility = 2;
 		}
 		// EN FINALE, SEUL LE NOMBRE DE PIECE COMPTE.
 		else {
@@ -94,7 +93,7 @@ public class AIPlayer extends Player {
 	}
 
 	public int playMove(Othello game) {
-		miniMaxAlphaBeta(game.getBoard(), depth, Double.MIN_VALUE, Double.MAX_VALUE, true);
+		miniMaxAlphaBeta(game.getBoard(), depth, - Double.MAX_VALUE, Double.MAX_VALUE, true);
 		//miniMax(game.getBoard(),depth,true);
 		return getBestMove();
 	}
@@ -110,18 +109,19 @@ public class AIPlayer extends Player {
 			for (int move : validMoves) {
 				Board newPosition = position.getBoardAfterMove(this.getTypePiece(), move);
 				Double eval = miniMaxAlphaBeta(newPosition, depth - 1, alpha, beta, false);
-				if (eval > maxEval) {
+				maxEval = Math.max(maxEval, eval);
+				alpha = Math.max(alpha, eval);
+				if (eval >= maxEval ) {
 					if (this.depth == depth) {
 						setBestMove(move);
 					}
-					maxEval = eval;
 				}
-				alpha = Math.max(alpha, eval);
+				
 				if (beta <= alpha)
-					return beta;
+					break;
 			}
-
 			return maxEval;
+			
 		} else {
 			Double minEval = Double.MAX_VALUE;
 			List<Integer> validMoves = position.getValidMoves(TypePiece.getOpposite(this.getTypePiece()));
@@ -131,7 +131,8 @@ public class AIPlayer extends Player {
 				minEval = Math.min(minEval, eval);
 				beta = Math.min(beta, eval);
 				if (beta <= alpha)
-					return alpha;
+					break;
+				
 			}
 
 			return minEval;
@@ -150,8 +151,8 @@ public class AIPlayer extends Player {
 			for (int move : validMoves) {
 				Board newPosition = position.getBoardAfterMove(this.getTypePiece(), move);
 				Double eval = miniMax(newPosition, depth - 1, false);
-
-				if (eval > maxEval) {
+				maxEval = Math.max(maxEval, eval);
+				if (eval >= maxEval) {
 					if (this.depth == depth) {
 						setBestMove(move);
 					}
